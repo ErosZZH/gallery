@@ -38,6 +38,24 @@ class AppComponent extends React.Component {
 
   getRangeRandom(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
+  };
+
+  get30DegRandom() {
+    return (Math.random() < 0.5? '': '-') + Math.floor(Math.random() * 30);
+  };
+
+  inverse(index) {
+    return function () {
+      var imgsArrangeArr = this.state.imgsArrangeArr;
+      imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+      this.setState({imgsArrangeArr});
+    }.bind(this);
+  }
+
+  center(index) {
+    return function () {
+      this.rearrange(index);
+    }.bind(this);
   }
 
   rearrange(centerIndex) {
@@ -58,21 +76,26 @@ class AppComponent extends React.Component {
 
       imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
-    imgsArrangeCenterArr[0].pos = centerPos;
+    imgsArrangeCenterArr[0] = {
+      pos: centerPos,
+      rotate: 0,
+      isCenter: true
+    };
 
     topImageSpliceIndex = Math.floor(Math.random() * (imgsArrangeArr.length - topImageNum));
     imgsArrangeTopArr = imgsArrangeArr.splice(topImageSpliceIndex, topImageNum);
 
     var self = this;
     imgsArrangeTopArr.forEach((value, index) => {
-      imgsArrangeTopArr[index].pos = {
-        top: self.getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),
-        left: self.getRangeRandom(vPosRangeX[0], vPosRangeX[1])
-      }
+      imgsArrangeTopArr[index] = {
+        pos: {
+          top: self.getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),
+          left: self.getRangeRandom(vPosRangeX[0], vPosRangeX[1])
+        },
+        rotate: self.get30DegRandom(),
+        isCenter: false
+      };
     });
-
-    console.log('left: ' + hPosRangeLeftSecX[0] + ":" + hPosRangeLeftSecX[1]);
-    console.log('right: ' + hPosRangeRightSecX[0] + ":" + hPosRangeRightSecX[1]);
 
     for(let i = 0, j = imgsArrangeArr.length, k = j / 2; i < j; i++) {
       var hPosRangeLORX = null;
@@ -81,10 +104,14 @@ class AppComponent extends React.Component {
       } else {
         hPosRangeLORX = hPosRangeRightSecX;
       }
-      imgsArrangeArr[i].pos = {
-        top: self.getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
-        left: self.getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
-      }
+      imgsArrangeArr[i] = {
+        pos: {
+          top: self.getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
+          left: self.getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
+        },
+        rotate: self.get30DegRandom(),
+        isCenter: false
+      };
     }
 
     if(imgsArrangeTopArr && imgsArrangeTopArr[0]) {
@@ -141,11 +168,15 @@ class AppComponent extends React.Component {
           pos: {
             left: 0,
             top: 0
-          }
+          },
+          rotate: 0,
+          isInverse: false,
+          isCenter: false
         }
       }
       imgFigures.push(<ImgFigure data={value} ref={'imgFigure' + index}
-        arrange={this.state.imgsArrangeArr[index]}></ImgFigure>);
+        arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)}
+        center={this.center(index)}></ImgFigure>);
     });
     return (
       <section className="stage" ref="stage">
@@ -162,16 +193,43 @@ class AppComponent extends React.Component {
 
 class ImgFigure extends React.Component {
 
+  handleClick(e) {
+    if(this.props.arrange.isCenter) {
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   render() {
     var styleObj = {};
     if(this.props.arrange.pos) {
       styleObj = this.props.arrange.pos;
     }
+    if(this.props.arrange.rotate) {
+      let rotate = this.props.arrange.rotate;
+      (['-moz-', '-ms-', '-webkit-', '']).forEach((value) => {
+        styleObj[value + 'transform'] = 'rotate(' + rotate + 'deg)';
+      });
+    }
+    if(this.props.arrange.isCenter) {
+      styleObj.zIndex = 11;
+    }
+    var imgFigureClass = 'img-figure';
+    imgFigureClass += this.props.arrange.isInverse? ' is-inverse': '';
     return (
-      <figure className="img-figure" style={styleObj}>
+      <figure className={imgFigureClass} style={styleObj} onClick={this.handleClick.bind(this)}>
         <img src={this.props.data.imageURL} alt={this.props.data.title}/>
         <figcaption>
           <h2 className="img-title">{this.props.data.title}</h2>
+          <div className="img-back" onClick={this.handleClick.bind(this)}>
+            <p>
+              {this.props.data.desc}
+            </p>
+          </div>
         </figcaption>
       </figure>
     );
