@@ -79,6 +79,7 @@ class AppComponent extends React.Component {
     imgsArrangeCenterArr[0] = {
       pos: centerPos,
       rotate: 0,
+      isInverse: false,
       isCenter: true
     };
 
@@ -93,6 +94,7 @@ class AppComponent extends React.Component {
           left: self.getRangeRandom(vPosRangeX[0], vPosRangeX[1])
         },
         rotate: self.get30DegRandom(),
+        isInverse: false,
         isCenter: false
       };
     });
@@ -110,6 +112,7 @@ class AppComponent extends React.Component {
           left: self.getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
         },
         rotate: self.get30DegRandom(),
+        isInverse: false,
         isCenter: false
       };
     }
@@ -174,9 +177,12 @@ class AppComponent extends React.Component {
           isCenter: false
         }
       }
-      imgFigures.push(<ImgFigure data={value} ref={'imgFigure' + index}
+      imgFigures.push(<ImgFigure key={index} data={value} ref={'imgFigure' + index}
         arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)}
         center={this.center(index)}></ImgFigure>);
+      controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]}
+                                           inverse={this.inverse(index)}
+                                           center={this.center(index)}/>);
     });
     return (
       <section className="stage" ref="stage">
@@ -211,8 +217,8 @@ class ImgFigure extends React.Component {
     }
     if(this.props.arrange.rotate) {
       let rotate = this.props.arrange.rotate;
-      (['-moz-', '-ms-', '-webkit-', '']).forEach((value) => {
-        styleObj[value + 'transform'] = 'rotate(' + rotate + 'deg)';
+      (['MozTransform', 'msTransform', 'WebkitTransform', 'transform']).forEach((value) => {
+        styleObj[value] = 'rotate(' + rotate + 'deg)';
       });
     }
     if(this.props.arrange.isCenter) {
@@ -234,6 +240,30 @@ class ImgFigure extends React.Component {
       </figure>
     );
   }
+}
+
+class ControllerUnit extends React.Component {
+
+  handleClick(e) {
+    if(this.props.arrange.isCenter) {
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  render() {
+    let controllerUnitClass = 'controller-unit';
+    controllerUnitClass += this.props.arrange.isCenter? ' is-center': '';
+    controllerUnitClass += this.props.arrange.isInverse? ' is-inverse': '';
+
+    return (
+      <span className={controllerUnitClass} onClick={this.handleClick.bind(this)}></span>
+    );
+  }
+
 }
 
 AppComponent.defaultProps = {
