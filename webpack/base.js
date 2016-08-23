@@ -1,14 +1,19 @@
 'use strict';
+
 const path = require('path');
 const srcPath = path.join(__dirname, '/../src');
 const dfltPort = 8000;
+const publicPath = '/assets/';
+
+let additionalPaths = [];
+
 function getDefaultModules() {
   return {
     preLoaders: [{
-        test: /\.(js|jsx)$/,
-        include: srcPath,
-        loader: 'eslint-loader'
-      }],
+      test: /\.(js|jsx)$/,
+      include: srcPath,
+      loader: 'eslint-loader'
+    }],
     loaders: [
       {
         test: /\.css$/,
@@ -45,12 +50,42 @@ function getDefaultModules() {
     ]
   };
 }
+
 module.exports = {
-  srcPath: srcPath,
-  publicPath: '/assets/',
-  port: dfltPort,
-  getDefaultModules: getDefaultModules,
   postcss: function () {
     return [];
-  }
+  },
+  getDefaultModules: getDefaultModules,
+  srcPath: srcPath,
+  additionalPaths: additionalPaths,
+  port: dfltPort,
+  debug: true,
+  devtool: 'eval',
+  publicPath: publicPath,
+  output: {
+    path: path.join(__dirname, '/../dist/assets'),
+    filename: 'app.js',
+    publicPath: `.${publicPath}`
+  },
+  devServer: {
+    contentBase: './src/',
+    historyApiFallback: true,
+    hot: true,
+    port: dfltPort,
+    publicPath: publicPath,
+    noInfo: false
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+    alias: {
+      actions: `${srcPath}/actions/`,
+      components: `${srcPath}/components/`,
+      sources: `${srcPath}/sources/`,
+      stores: `${srcPath}/stores/`,
+      styles: `${srcPath}/styles/`,
+      data: `${srcPath}/data/`,
+      config: `${srcPath}/config/` + process.env.REACT_WEBPACK_ENV
+    }
+  },
+  module: {}
 };

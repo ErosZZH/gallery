@@ -4,7 +4,6 @@ let path = require('path');
 let webpack = require('webpack');
 
 let baseConfig = require('./base');
-let defaultSettings = require('./defaults');
 
 // Add needed plugins here
 let BowerWebpackPlugin = require('bower-webpack-plugin');
@@ -26,7 +25,7 @@ let config = Object.assign({}, baseConfig, {
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.NoErrorsPlugin()
   ],
-  module: defaultSettings.getDefaultModules()
+  module: baseConfig.getDefaultModules()
 });
 
 // Add needed loaders to the defaults here
