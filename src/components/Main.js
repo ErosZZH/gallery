@@ -44,6 +44,11 @@ class AppComponent extends React.Component {
     return (Math.random() < 0.5? '': '-') + Math.floor(Math.random() * 30);
   };
 
+  /**
+   * 翻转
+   * @param index
+   * @returns {function(this:AppComponent)}
+     */
   inverse(index) {
     return function () {
       var imgsArrangeArr = this.state.imgsArrangeArr;
@@ -52,12 +57,21 @@ class AppComponent extends React.Component {
     }.bind(this);
   }
 
+  /**
+   * 点击居中
+   * @param index
+   * @returns {function(this:AppComponent)}
+     */
   center(index) {
     return function () {
       this.rearrange(index);
     }.bind(this);
   }
 
+  /**
+   * 重新排布图片
+   * @param centerIndex
+     */
   rearrange(centerIndex) {
     var imgsArrangeArr = this.state.imgsArrangeArr,
       centerPos = Constant.centerPos,
@@ -128,6 +142,9 @@ class AppComponent extends React.Component {
   };
 
 
+  /**
+   * 计算img-sec取值范围
+   */
   componentDidMount() {
     var stageDOM = ReactDOM.findDOMNode(this.refs.stage),
       stageW = stageDOM.scrollWidth,

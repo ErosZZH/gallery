@@ -28,7 +28,7 @@ html, body {
   overflow: hidden;
   background-color: #ddd;
 
-  perspective: 1800px;
+  perspective: 1800px;  //景深
 
   @at-root {
     .img-figure {
@@ -38,7 +38,7 @@ html, body {
       margin: 0;
       padding: 40px;
       background-color: #fff;
-      box-sizing: border-box;
+      box-sizing: border-box; //width值包含border
 
       transform-origin: 0 50% 0;
       transform-style: preserve-3d;
