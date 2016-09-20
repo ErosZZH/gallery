@@ -80,6 +80,8 @@ module.exports = {
     alias: {
       actions: `${srcPath}/actions/`,
       components: `${srcPath}/components/`,
+      containers: `${srcPath}/containers/`,
+      fonts: `${srcPath}/fonts/`,
       sources: `${srcPath}/sources/`,
       stores: `${srcPath}/stores/`,
       styles: `${srcPath}/styles/`,

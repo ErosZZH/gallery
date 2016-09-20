@@ -5,6 +5,19 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const config = require('./webpack.config.js');
 const open = require('open');
+const fs = require('fs');
+
+const babelrc = fs.readFileSync('./.babelrc');
+let babelConfig;
+
+try {
+  babelConfig = JSON.parse(babelrc);
+} catch (err) {
+  console.error('==>     ERROR: Error parsing your .babelrc.');
+  console.error(err);
+}
+
+require('babel-core/register')(babelConfig);
 
 new WebpackDevServer(webpack(config), config.devServer)
 .listen(config.port, 'localhost', (err) => {
