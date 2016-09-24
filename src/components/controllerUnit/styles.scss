@@ -1,0 +1,34 @@
+.controller-unit {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  text-align: center;
+  cursor:pointer;
+  background-color: #aaa;
+  border-radius: 50%;
+
+  transform: scale(.5);
+  transition: transform .6s ease-in-out, background-color .3s;
+  vertical-align: middle;
+
+  &.is-center {
+    background-color: #888;
+    transform: scale(1);
+
+    &::after {
+      color: #fff;
+      font-family: "icons-turn-arrow";
+      line-height: 30px;
+      content: "\e600";
+      font-size: 80%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+
+  &.is-inverse {
+    background-color: #555;
+    transform: rotateY(180deg);
+  }
+}

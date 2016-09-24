@@ -4,14 +4,14 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from 'stores/configureStore';
 // import App from 'components/Main';
-import App from 'containers/stage';
+import Stage from 'containers/stage';
 
 const store = configureStore();
 
 // Render the main component into the dom
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Stage />
   </Provider>,
   document.getElementById('app')
 );

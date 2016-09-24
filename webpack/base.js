@@ -82,11 +82,9 @@ module.exports = {
       components: `${srcPath}/components/`,
       containers: `${srcPath}/containers/`,
       fonts: `${srcPath}/fonts/`,
-      sources: `${srcPath}/sources/`,
       stores: `${srcPath}/stores/`,
       styles: `${srcPath}/styles/`,
-      data: `${srcPath}/data/`,
-      config: `${srcPath}/config/` + process.env.REACT_WEBPACK_ENV
+      data: `${srcPath}/data/`
     }
   },
   module: {}
