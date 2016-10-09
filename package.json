@@ -72,6 +72,7 @@
     "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
+    "immutable": "^3.8.1",
     "normalize.css": "^4.0.0",
     "react": "^15.0.0",
     "react-document-meta": "^2.0.3",

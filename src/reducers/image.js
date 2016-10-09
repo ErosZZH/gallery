@@ -5,6 +5,7 @@ import {
   INVERSE_IMAGE,
   REARRANGE
 } from '../types';
+import Immutable from 'immutable';
 
 const imgsArrangeArr = [];
 const imageDatas = require('../data/imageDatas.json').map((imageData) => {
@@ -27,27 +28,12 @@ const initialState = {
 };
 
 export default function image(state = initialState, action = {}) {
+  const newState = Immutable.fromJS(state);
   switch (action.type) {
     case INVERSE_IMAGE:
-      const arrange = state.imgsArrangeArr[action.index];
-      const before = state.imgsArrangeArr.slice(0, action.index);
-      const after = state.imgsArrangeArr.slice(action.index + 1);
-      return {
-        ...state,
-        imgsArrangeArr: [
-          ...before,
-          {
-            ...arrange,
-            isInverse: !arrange.isInverse
-          },
-          ...after
-        ]
-      };
+      return newState.updateIn(['imgsArrangeArr', action.index, 'isInverse'], isInverse => !isInverse).toJS();
     case REARRANGE:
-      return {
-        ...state,
-        imgsArrangeArr: [...action.imgsArrangeArr]
-      };
+      return newState.set('imgsArrangeArr', action.imgsArrangeArr).toJS();
     default:
       return state;
   }
