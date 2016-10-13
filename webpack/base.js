@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const srcPath = path.join(__dirname, '/../src');
+const srcPath = path.join(__dirname, '/../client');
 const dfltPort = 8000;
 const publicPath = '/assets/';
 
@@ -68,7 +68,7 @@ module.exports = {
     publicPath: `.${publicPath}`
   },
   devServer: {
-    contentBase: './src/',
+    contentBase: './client/',
     historyApiFallback: true,
     hot: true,
     port: dfltPort,

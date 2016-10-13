@@ -1,7 +1,7 @@
 'use strict';
 
 let path = require('path');
-let srcPath = path.join(__dirname, '/../src/');
+let srcPath = path.join(__dirname, '/../app/');
 
 let baseConfig = require('./base');
 
@@ -16,7 +16,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         loader: 'isparta-instrumenter-loader',
         include: [
-          path.join(__dirname, '/../src')
+          path.join(__dirname, '/../app')
         ]
       }
     ],
@@ -31,7 +31,7 @@ module.exports = {
         include: [].concat(
           baseConfig.additionalPaths,
           [
-            path.join(__dirname, '/../src'),
+            path.join(__dirname, '/../app'),
             path.join(__dirname, '/../test')
           ]
         )
