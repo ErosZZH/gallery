@@ -6,7 +6,9 @@ import configureStore from 'stores/configureStore';
 // import App from 'components/Main';
 import Stage from 'containers/stage';
 
-const store = configureStore();
+const initialState = window.__INITIAL_STATE__;
+
+const store = configureStore(initialState);
 
 // Render the main component into the dom
 ReactDOM.render(
