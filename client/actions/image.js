@@ -2,6 +2,8 @@
  * Created by rick on 16/9/22.
  */
 import * as types from '../types';
+import request from 'axios';
+import config from '../../config';
 
 export function inverse(index) {
   return {type: types.INVERSE_IMAGE, index};
@@ -80,7 +82,41 @@ export function rearrange(centerIndex, imgsArrangeArr, stage) {
   return {type: types.REARRANGE, imgsArrangeArr};
 }
 
-export function setImage(images) {
-  return {type: types.INIT_IMAGE, images};
+export function setImage() {
+  return dispatch => {
+    let url = '';
+    if(__DEVCLIENT__) {
+      url = '/api/fetch';
+    } else {
+      url = `http://localhost:${config.port}/api/fetch`;
+    }
+    return request.get(url)
+      .then(response => {
+        const imgsArrangeArr = [];
+        const imageDatas = response.data.map((imageData) => {
+          imageData.imageURL = 'images/' + imageData.fileName;
+          imgsArrangeArr.push({
+            pos: {
+              left: 0,
+              top: 0
+            },
+            rotate: 0,
+            isInverse: false,
+            isCenter: false
+          });
+          return imageData;
+        });
+        return {
+          imageDatas: imageDatas,
+          imgsArrangeArr: imgsArrangeArr
+        };
+      })
+      .then(images => {
+        dispatch({type: types.INIT_IMAGE, images});
+      })
+      .catch(err => {
+        console.log('SSR render error' + err.stack);
+      });
+  }
 }
 

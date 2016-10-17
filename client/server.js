@@ -2,48 +2,26 @@
  * Created by rick on 2016/10/13.
  */
 import React from 'react';
-import request from 'axios';
 import {renderToString} from 'react-dom/server';
 import {Provider} from 'react-redux';
 import configureStore from 'stores/configureStore';
 import {setImage} from 'actions/image';
 import Stage from 'containers/stage';
-import config from '../config';
 
 export default function render(req, res) {
   const store = configureStore();
 
-  request.get(`http://localhost:${config.port}/api/fetch`)
-    .then(response => {
-      const imgsArrangeArr = [];
-      const imageDatas = response.data.map((imageData) => {
-        imageData.imageURL = 'images/' + imageData.fileName;
-        imgsArrangeArr.push({
-          pos: {
-            left: 0,
-            top: 0
-          },
-          rotate: 0,
-          isInverse: false,
-          isCenter: false
-        });
-        return imageData;
-      });
-      return {
-        imageDatas: imageDatas,
-        imgsArrangeArr: imgsArrangeArr
-      };
-    })
-    .then(images => {
-      store.dispatch(setImage(images));
-      const initialState = store.getState();
-      const componentHTML = renderToString(
-        <Provider store={store}>
-          <Stage />
-        </Provider>
-      );
+  new Promise(resolve => {
+    return resolve(store.dispatch(setImage()));
+  }).then(() => {
+    const initialState = store.getState();
+    const componentHTML = renderToString(
+      <Provider store={store}>
+        <Stage />
+      </Provider>
+    );
 
-      res.status(200).send(`
+    return res.status(200).send(`
           <!doctype html>
           <html>
           <head>
@@ -60,9 +38,6 @@ export default function render(req, res) {
           </body>
           </html>
         `);
-    })
-    .catch(err => {
-      console.log('SSR render error' + err.stack);
-    });
+  });
 
 }
