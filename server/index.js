@@ -29,9 +29,6 @@ if (process.env.NODE_ENV === 'development') {
 app.use(bodyParser.json({strict: false}));
 app.use(bodyParser.urlencoded({extended: false}));
 
-// app.set('views', path.join(config.baseDir, 'client'));
-// app.engine('html', require('swig').renderFile);
-// app.set('view engine', 'html');
 app.use(express.static(path.join(config.baseDir, 'dist')));
 
 //page
