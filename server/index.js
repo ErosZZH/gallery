@@ -12,6 +12,7 @@ import bodyParser from 'body-parser';
 import config from '../config';
 import webpackDevConfig from '../webpack/webpack-dev-client';
 import homepage from '../dist/assets/server';
+import {fetchData} from './api';
 
 const app = express();
 
@@ -37,6 +38,8 @@ app.use(express.static(path.join(config.baseDir, 'dist')));
 app.get('/', (req, res) => {
   homepage(req, res);
 });
+
+app.get('/api/fetch', fetchData);
 
 //exception
 app.get('/*', (req, res) => {
