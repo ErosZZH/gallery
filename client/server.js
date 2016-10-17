@@ -4,15 +4,16 @@
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {Provider} from 'react-redux';
-import configureStore from '../store/configureStore';
-import {setImage} from '../actions/image';
+import configureStore from 'stores/configureStore';
+import {setImage} from 'actions/image';
+import Stage from 'containers/stage';
 
 export default function render(req, res) {
   const store = configureStore();
 
   new Promise((resolve) => {
     const imgsArrangeArr = [];
-    const imageDatas = require('../data/imageDatas.json').map((imageData) => {
+    const imageDatas = require('./data/imageDatas.json').map((imageData) => {
       imageData.imageURL = 'images/' + imageData.fileName;
       imgsArrangeArr.push({
         pos: {
@@ -34,7 +35,7 @@ export default function render(req, res) {
     const initialState = store.getState();
     const componentHTML = renderToString(
       <Provider store={store}>
-        <div></div>
+        <Stage />
       </Provider>
     );
 
@@ -55,5 +56,5 @@ export default function render(req, res) {
       </body>
       </html>
     `);
-  });
-};
+  })
+}

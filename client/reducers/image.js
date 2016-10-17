@@ -3,7 +3,8 @@
  */
 import {
   INVERSE_IMAGE,
-  REARRANGE
+  REARRANGE,
+  INIT_IMAGE
 } from '../types';
 import Immutable from 'immutable';
 
@@ -14,6 +15,11 @@ export default function image(state = {}, action = {}) {
       return newState.updateIn(['imgsArrangeArr', action.index, 'isInverse'], isInverse => !isInverse).toJS();
     case REARRANGE:
       return newState.set('imgsArrangeArr', action.imgsArrangeArr).toJS();
+    case INIT_IMAGE:
+      return {
+        ...state,
+        ...action.images
+      };
     default:
       return state;
   }

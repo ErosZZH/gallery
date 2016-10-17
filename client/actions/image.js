@@ -80,3 +80,7 @@ export function rearrange(centerIndex, imgsArrangeArr, stage) {
   return {type: types.REARRANGE, imgsArrangeArr};
 }
 
+export function setImage(images) {
+  return {type: types.INIT_IMAGE, images};
+}
+

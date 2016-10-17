@@ -10,8 +10,8 @@ import path from 'path';
 import open from 'open';
 import bodyParser from 'body-parser';
 import config from '../config';
-import webpackDevConfig from '../webpack/webpack-dev';
-import homepage from './views';
+import webpackDevConfig from '../webpack/webpack-dev-client';
+import homepage from '../dist/assets/server';
 
 const app = express();
 
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 
 //exception
 app.get('/*', (req, res) => {
-  res.redirect("/");
+  res.redirect('/');
 });
 
 app.listen(config.port);

@@ -1,7 +1,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import config from '../config';
-import getDefaultModules from './webpack-base';
+import loaders from './webpack-base';
 
 const assetsPath = path.join(config.baseDir, 'dist', 'assets');
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
@@ -12,14 +12,14 @@ const configure = {
   devtool: 'eval-source-map',
   context: path.join(config.baseDir, 'client'),
   entry: {
-    app: ['./index', hotMiddlewareScript]
+    app: ['./client', hotMiddlewareScript]
   },
   output: {
     path: assetsPath,
     filename: 'app.js',
     publicPath: '/assets/'
   },
-  module: getDefaultModules(),
+  module: loaders.commonLoaders,
   resolve: {
     root: [path.join(config.baseDir, 'client')],
     extensions: ['', '.js', '.jsx']
@@ -36,7 +36,7 @@ const configure = {
     return [];
   }
 };
-
+configure.module.loaders.push(loaders.clientStyle);
 configure.module.loaders.push({
   test: /\.(js|jsx)$/,
   loader: 'react-hot!babel-loader',

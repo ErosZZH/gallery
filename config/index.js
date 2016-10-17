@@ -3,14 +3,14 @@
  */
 'use strict';
 
-import path from 'path';
+var path = require('path');
 
-const baseDir = path.join(__dirname, '..');
-const port = 8000;
+var baseDir = path.join(__dirname, '..');
+var port = 8000;
 
-const config = {
-  baseDir,
-  port
+var config = {
+  baseDir: baseDir,
+  port: port
 };
 
-export default config;
+module.exports = config;
