@@ -2,9 +2,12 @@
     "verbose": false,
     "watch": [
       "client/server.js",
+      "client/meta.js",
+      "client/helmconfig.js",
       "server",
       "webpack/webpack-dev-client.js",
-      "webpack/webpack-dev-server.js"
+      "webpack/webpack-dev-server.js",
+      "webpack/webpack-base.js"
     ],
     "exec": "npm run build:dev && npm run babel-node -- server/index.js"
 }

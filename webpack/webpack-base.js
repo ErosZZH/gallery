@@ -14,7 +14,7 @@ module.exports = {
     // }],
     loaders: [
       {
-        test: /\.(png|jpg|gif|woff|woff2|eot|ttf)$/,
+        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|ico)$/,
         loader: 'url-loader',
         query: {
           name: '[hash].[ext]',

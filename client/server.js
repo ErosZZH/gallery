@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import configureStore from 'stores/configureStore';
 import {setImage} from 'actions/image';
 import Stage from 'containers/stage';
+import header from './meta';
 
 export default function render(req, res) {
   const store = configureStore();
@@ -25,16 +26,14 @@ export default function render(req, res) {
           <!doctype html>
           <html>
           <head>
-            <meta charset="utf-8">
-            <title>React Webpack Template Title</title>
-            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-            <meta name="description" content="">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+            ${header.title.toString()}
+            ${header.meta.toString()}
+            ${header.link.toString()}
           </head>
           <body>
             <div id="app" class="content">${componentHTML}</div>
             <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};</script>
-            <script type="text/javascript" src="./assets/app.js"></script>
+            <script type="text/javascript" src="/assets/app.js"></script>
           </body>
           </html>
         `);
