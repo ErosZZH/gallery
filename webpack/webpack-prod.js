@@ -9,7 +9,7 @@ var loaders = require('./webpack-base');
 var assetsPath = path.join(config.baseDir, 'dist', 'assets');
 var publicPath = '/assets/';
 
-var prodLoaders = [
+var babelLoaders = [
   {
     test: /\.js$|\.jsx$/,
     loader: 'babel-loader',
@@ -24,27 +24,32 @@ var prodLoaders = [
     },
     include: path.join(config.baseDir, 'client'),
     exclude: path.join(config.baseDir, 'node_modules')
-  },
+  }
+];
+
+var styleLoaders = [
   { test: /\.css$/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader')
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
   },
   {
     test: /\.sass/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader!sass-loader?outputStyle=expanded&indentedSyntax')
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader?outputStyle=expanded&indentedSyntax')
   },
   {
     test: /\.scss/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader!sass-loader?outputStyle=expanded')
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader?outputStyle=expanded')
   },
   {
     test: /\.less/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader!less-loader')
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!less-loader')
   },
   {
     test: /\.styl/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader!stylus-loader')
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!stylus-loader')
   }
 ];
+
+var commonLoaders = babelLoaders.concat(styleLoaders).concat(loaders.commonLoaders.loaders);
 
 var configure = [
   {
@@ -59,8 +64,9 @@ var configure = [
       filename: '[name].js',
       publicPath: publicPath
     },
-
-    module: loaders.commonLoaders,
+    module: {
+      loaders: commonLoaders
+    },
     resolve: {
       root: [path.join(config.baseDir, 'client')],
       extensions: ['', '.js', '.jsx']
@@ -96,7 +102,9 @@ var configure = [
       publicPath: publicPath,
       libraryTarget: 'commonjs2'
     },
-    module: loaders.commonLoaders,
+    module: {
+      loaders: commonLoaders
+    },
     resolve: {
       root: [path.join(config.baseDir, 'client')],
       extensions: ['', '.js', '.jsx']
@@ -121,8 +129,5 @@ var configure = [
     }
   }
 ];
-
-configure[0].module.loaders.push(prodLoaders);
-configure[1].module.loaders.push(prodLoaders);
 
 module.exports = configure;
