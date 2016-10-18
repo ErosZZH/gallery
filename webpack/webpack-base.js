@@ -15,7 +15,11 @@ module.exports = {
     loaders: [
       {
         test: /\.(png|jpg|gif|woff|woff2|eot|ttf)$/,
-        loader: 'url-loader?limit=8192'
+        loader: 'url-loader',
+        query: {
+          name: '[hash].[ext]',
+          limit: 8192
+        }
       },
       {
         test: /\.(mp4|ogg|svg)$/,

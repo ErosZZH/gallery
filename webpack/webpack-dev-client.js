@@ -1,12 +1,12 @@
-import path from 'path';
-import webpack from 'webpack';
-import config from '../config';
-import loaders from './webpack-base';
+var path = require('path');
+var webpack = require('webpack');
+var config = require('../config');
+var loaders = require('./webpack-base');
 
-const assetsPath = path.join(config.baseDir, 'dist', 'assets');
-const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
+var assetsPath = path.join(config.baseDir, 'dist', 'assets');
+var hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
 
-const configure = {
+var configure = {
   name: 'client',
   cache: true,
   devtool: 'eval-source-map',
@@ -45,4 +45,4 @@ configure.module.loaders.push({
   )
 });
 
-export default configure;
+module.exports = configure;
