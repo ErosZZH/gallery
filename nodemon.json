@@ -1,0 +1,10 @@
+{
+    "verbose": false,
+    "watch": [
+      "client/server.js",
+      "server",
+      "webpack/webpack-dev-client.js",
+      "webpack/webpack-dev-server.js"
+    ],
+    "exec": "npm run build:dev && npm run babel-node -- server/index.js"
+}

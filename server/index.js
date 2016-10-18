@@ -7,7 +7,6 @@
 import express from 'express';
 import webpack from 'webpack';
 import path from 'path';
-import open from 'open';
 import bodyParser from 'body-parser';
 import config from '../config';
 import webpackDevConfig from '../webpack/webpack-dev-client';
@@ -44,5 +43,3 @@ app.get('/*', (req, res) => {
 });
 
 app.listen(config.port);
-
-open(`http://localhost:${config.port}`);
