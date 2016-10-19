@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import DocumentMeta from 'react-document-meta';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { inverse, rearrange } from 'actions/image';
+import { inverse, rearrange, setImage } from 'actions/image';
 import { ImgFigure } from 'components/imgFigure';
 import { ControllerUnit } from 'components/controllerUnit';
 
@@ -84,25 +84,29 @@ export class Stage extends Component {
     return stage;
   }
 
-  componentDidMount() {
-    const stageDOM = ReactDOM.findDOMNode(this.refs.stage),
-      stageW = stageDOM.scrollWidth,
-      stageH = stageDOM.scrollHeight;
+  componentWillMount() {
+    this.props.setImage();
+  }
 
-    const imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0),
-      imgW = imgFigureDOM.scrollWidth,
-      imgH = imgFigureDOM.scrollHeight;
+  componentDidUpdate(prevProps) {
+    if(this.refs.stage && !prevProps.imageDatas) {
+      const stageDOM = ReactDOM.findDOMNode(this.refs.stage),
+        stageW = stageDOM.scrollWidth,
+        stageH = stageDOM.scrollHeight;
 
-    const stage = this.init({
-      stageW,
-      stageH,
-      imgW,
-      imgH
-    });
+      const imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0),
+        imgW = imgFigureDOM.scrollWidth,
+        imgH = imgFigureDOM.scrollHeight;
 
-    this.setState({stage});
-
-    this.props.rearrange(0, this.props.imgsArrangeArr, stage);
+      const stage = this.init({
+        stageW,
+        stageH,
+        imgW,
+        imgH
+      });
+      this.setState({stage});
+      this.props.rearrange(0, this.props.imgsArrangeArr, stage);
+    }
   }
 
 
@@ -119,36 +123,42 @@ export class Stage extends Component {
   }
 
   render() {
-    var controllerUnits = [];
-    var imgFigures = [];
-    this.props.imageDatas.forEach((value, index) => {
-      imgFigures.push(<ImgFigure key={index} data={value}
-                                 ref={'imgFigure' + index}
-                                 arrange={this.props.imgsArrangeArr[index]}
-                                 inverse={this.inverse(index)}
-                                 center={this.center(index)}
-      />);
-      controllerUnits.push(<ControllerUnit key={index}
-                                           arrange={this.props.imgsArrangeArr[index]}
-                                           inverse={this.inverse(index)}
-                                           center={this.center(index)}
-      />);
-    });
-    return (
-      <section className="stage" ref="stage">
-        <DocumentMeta {...metaData} />
-        <section className="img-sec">
-          {imgFigures}
+    if(this.props.imageDatas) {
+      var controllerUnits = [];
+      var imgFigures = [];
+      this.props.imageDatas.forEach((value, index) => {
+        imgFigures.push(<ImgFigure key={index} data={value}
+                                   ref={'imgFigure' + index}
+                                   arrange={this.props.imgsArrangeArr[index]}
+                                   inverse={this.inverse(index)}
+                                   center={this.center(index)}
+        />);
+        controllerUnits.push(<ControllerUnit key={index}
+                                             arrange={this.props.imgsArrangeArr[index]}
+                                             inverse={this.inverse(index)}
+                                             center={this.center(index)}
+        />);
+      });
+      return (
+        <section className="stage" ref="stage">
+          <DocumentMeta {...metaData} />
+          <section className="img-sec">
+            {imgFigures}
+          </section>
+          <nav className="controller-nav">
+            {controllerUnits}
+          </nav>
         </section>
-        <nav className="controller-nav">
-          {controllerUnits}
-        </nav>
-      </section>
-    );
+      );
+    } else {
+      return (
+        <div></div>
+      );
+    }
   }
 }
 
 export default connect((state) => {return {
   imgsArrangeArr: state.image.imgsArrangeArr,
   imageDatas: state.image.imageDatas
-}}, {inverse, rearrange})(Stage);
+}}, {inverse, rearrange, setImage})(Stage);

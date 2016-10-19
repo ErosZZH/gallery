@@ -1,21 +1,24 @@
 /**
  * Created by rick on 16/9/20.
  */
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 
-export default function configureStore(initialState) {
+export default function configureStore(initialState, history) {
 
-  const middleware = applyMiddleware(thunkMiddleware);
+  const middleware = [thunkMiddleware, routerMiddleware(history)];
 
   let store;
 
   if (__DEVCLIENT__) {
-    store = (window.devToolsExtension ? window.devToolsExtension()(middleware(createStore)) :
-      middleware(createStore))(rootReducer, initialState);
+    store = createStore(rootReducer, initialState, compose(
+      applyMiddleware(...middleware),
+      typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f
+    ));
   } else {
-    store = middleware(createStore)(rootReducer, initialState);
+    store = createStore(rootReducer, initialState, compose(applyMiddleware(...middleware), f => f));
   }
 
   if (module.hot) {
