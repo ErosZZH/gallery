@@ -84,29 +84,23 @@ export class Stage extends Component {
     return stage;
   }
 
-  componentWillMount() {
-    this.props.setImage();
-  }
+  componentDidMount() {
+    const stageDOM = ReactDOM.findDOMNode(this.refs.stage),
+      stageW = stageDOM.scrollWidth,
+      stageH = stageDOM.scrollHeight;
 
-  componentDidUpdate(prevProps) {
-    if(this.refs.stage && !prevProps.imageDatas) {
-      const stageDOM = ReactDOM.findDOMNode(this.refs.stage),
-        stageW = stageDOM.scrollWidth,
-        stageH = stageDOM.scrollHeight;
+    const imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0),
+      imgW = imgFigureDOM.scrollWidth,
+      imgH = imgFigureDOM.scrollHeight;
 
-      const imgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0),
-        imgW = imgFigureDOM.scrollWidth,
-        imgH = imgFigureDOM.scrollHeight;
-
-      const stage = this.init({
-        stageW,
-        stageH,
-        imgW,
-        imgH
-      });
-      this.setState({stage});
-      this.props.rearrange(0, this.props.imgsArrangeArr, stage);
-    }
+    const stage = this.init({
+      stageW,
+      stageH,
+      imgW,
+      imgH
+    });
+    this.setState({stage});
+    this.props.rearrange(0, this.props.imgsArrangeArr, stage);
   }
 
 
@@ -123,38 +117,32 @@ export class Stage extends Component {
   }
 
   render() {
-    if(this.props.imageDatas) {
-      var controllerUnits = [];
-      var imgFigures = [];
-      this.props.imageDatas.forEach((value, index) => {
-        imgFigures.push(<ImgFigure key={index} data={value}
-                                   ref={'imgFigure' + index}
-                                   arrange={this.props.imgsArrangeArr[index]}
-                                   inverse={this.inverse(index)}
-                                   center={this.center(index)}
-        />);
-        controllerUnits.push(<ControllerUnit key={index}
-                                             arrange={this.props.imgsArrangeArr[index]}
-                                             inverse={this.inverse(index)}
-                                             center={this.center(index)}
-        />);
-      });
-      return (
-        <section className="stage" ref="stage">
-          <DocumentMeta {...metaData} />
-          <section className="img-sec">
-            {imgFigures}
-          </section>
-          <nav className="controller-nav">
-            {controllerUnits}
-          </nav>
+    var controllerUnits = [];
+    var imgFigures = [];
+    this.props.imageDatas.forEach((value, index) => {
+      imgFigures.push(<ImgFigure key={index} data={value}
+                                 ref={'imgFigure' + index}
+                                 arrange={this.props.imgsArrangeArr[index]}
+                                 inverse={this.inverse(index)}
+                                 center={this.center(index)}
+      />);
+      controllerUnits.push(<ControllerUnit key={index}
+                                           arrange={this.props.imgsArrangeArr[index]}
+                                           inverse={this.inverse(index)}
+                                           center={this.center(index)}
+      />);
+    });
+    return (
+      <section className="stage" ref="stage">
+        <DocumentMeta {...metaData} />
+        <section className="img-sec">
+          {imgFigures}
         </section>
-      );
-    } else {
-      return (
-        <div></div>
-      );
-    }
+        <nav className="controller-nav">
+          {controllerUnits}
+        </nav>
+      </section>
+    );
   }
 }
 
