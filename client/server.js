@@ -22,8 +22,7 @@ export default function render(req, res) {
       res.redirect(302, redirect.pathname + redirect.search);
     } else if (props) {
       new Promise(resolve => {
-        //挪到componentWillMount执行
-        // return resolve(store.dispatch(setImage()));
+        return resolve(store.dispatch(setImage()));
       }).then(() => {
         const initialState = store.getState();
         const componentHTML = renderToString(
