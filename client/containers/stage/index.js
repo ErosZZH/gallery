@@ -4,7 +4,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { inverse, rearrange, setImage } from 'actions/image';
+import { inverse, rearrange } from 'actions/image';
 import { ImgFigure } from 'components/imgFigure';
 import { ControllerUnit } from 'components/controllerUnit';
 
@@ -134,4 +134,4 @@ export class Stage extends Component {
 export default connect((state) => {return {
   imgsArrangeArr: state.image.imgsArrangeArr,
   imageDatas: state.image.imageDatas
-}}, {inverse, rearrange, setImage})(Stage);
+}}, {inverse, rearrange})(Stage);
