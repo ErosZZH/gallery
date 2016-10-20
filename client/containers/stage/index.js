@@ -2,7 +2,6 @@
  * Created by rick on 16/9/20.
  */
 import React, { Component, PropTypes } from 'react';
-import DocumentMeta from 'react-document-meta';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { inverse, rearrange } from 'actions/image';
@@ -11,19 +10,6 @@ import { ControllerUnit } from 'components/controllerUnit';
 
 require('normalize.css/normalize.css');
 require('./styles/stage.scss');
-
-
-const metaData = {
-  title: '我的相册',
-  description: '我的react相册',
-  canonical: 'http://example.com/path/to/page',
-  meta: {
-    charset: 'utf-8',
-    name: {
-      keywords: 'react,meta,redux,html,tags'
-    }
-  }
-};
 
 export class Stage extends Component {
 
@@ -99,9 +85,7 @@ export class Stage extends Component {
       imgW,
       imgH
     });
-
     this.setState({stage});
-
     this.props.rearrange(0, this.props.imgsArrangeArr, stage);
   }
 
@@ -136,7 +120,6 @@ export class Stage extends Component {
     });
     return (
       <section className="stage" ref="stage">
-        <DocumentMeta {...metaData} />
         <section className="img-sec">
           {imgFigures}
         </section>

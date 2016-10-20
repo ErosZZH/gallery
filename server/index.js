@@ -30,16 +30,18 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static(path.join(config.baseDir, 'dist')));
 
-//page
-app.get('/', (req, res) => {
-  homepage(req, res);
-});
+
 
 app.get('/api/fetch', fetchData);
 
-//exception
-app.get('/*', (req, res) => {
-  res.redirect('/');
+//page 页面路由交给routes
+app.get('*', (req, res) => {
+  homepage(req, res);
 });
+
+//exception
+// app.get('/*', (req, res) => {
+//   res.redirect('/');
+// });
 
 app.listen(config.port);

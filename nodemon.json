@@ -4,6 +4,7 @@
       "client/server.js",
       "client/meta.js",
       "client/helmconfig.js",
+      "client/routes.js",
       "server",
       "webpack/webpack-dev-client.js",
       "webpack/webpack-dev-server.js",
