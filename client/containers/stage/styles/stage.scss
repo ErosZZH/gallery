@@ -37,3 +37,10 @@ html, body {
   width: 100%;
   text-align: center;
 }
+
+.upload-page {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 101;
+}
