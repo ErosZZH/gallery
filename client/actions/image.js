@@ -120,3 +120,20 @@ export function setImage() {
   }
 }
 
+export function setTitle(index, value) {
+  return {type: types.SET_TITLE, title: {index, value}};
+}
+
+export function setDesc(index, value) {
+  return {type: types.SET_DESC, desc: {index, value}};
+}
+
+export function saveText(image) {
+  return dispatch => {
+    request['post']('/api/updateText', image)
+      .then(() => {
+         dispatch({type: types.SAVE_TEXT});
+      });
+  }
+}
+
