@@ -34,6 +34,7 @@ app.use(express.static(path.join(config.baseDir, 'dist')));
 
 app.get('/api/fetch', api.fetchData);
 app.post('/api/updateText', api.updateText);
+app.post('/api/uploadImage', api.uploadImage);
 
 //page 页面路由交给routes
 app.get('*', (req, res) => {

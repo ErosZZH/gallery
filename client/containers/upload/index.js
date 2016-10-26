@@ -47,6 +47,7 @@ export class Upload extends Component {
                 url={imageData.imageURL}
                 title={imageData.title}
                 desc={imageData.desc}
+                fileName={imageData.fileName}
                 changeTitle={this.changeTitle(index)}
                 changeDesc={this.changeDesc(index)}
                 savetxt={this.saveText(index)}
