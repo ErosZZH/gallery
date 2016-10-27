@@ -126,6 +126,9 @@ export class Stage extends Component {
         <nav className="controller-nav">
           {controllerUnits}
         </nav>
+        <div className="upload-page">
+          <a href="/upload"><img src="/icons/upload.png" alt="上传图片"/></a>
+        </div>
       </section>
     );
   }

@@ -11,7 +11,7 @@ import bodyParser from 'body-parser';
 import config from '../config';
 import webpackDevConfig from '../webpack/webpack-dev-client';
 import homepage from '../dist/assets/server';
-import {fetchData} from './api';
+import * as api from './api';
 
 const app = express();
 
@@ -32,7 +32,9 @@ app.use(express.static(path.join(config.baseDir, 'dist')));
 
 
 
-app.get('/api/fetch', fetchData);
+app.get('/api/fetch', api.fetchData);
+app.post('/api/updateText', api.updateText);
+app.post('/api/uploadImage', api.uploadImage);
 
 //page 页面路由交给routes
 app.get('*', (req, res) => {

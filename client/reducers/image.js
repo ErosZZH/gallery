@@ -4,7 +4,10 @@
 import {
   INVERSE_IMAGE,
   REARRANGE,
-  INIT_IMAGE
+  INIT_IMAGE,
+  SET_TITLE,
+  SET_DESC,
+  REFRESH_IMAGE
 } from '../types';
 import Immutable from 'immutable';
 
@@ -20,6 +23,12 @@ export default function image(state = {}, action = {}) {
         ...state,
         ...action.images
       };
+    case SET_TITLE:
+      return newState.setIn(['imageDatas', action.title.index, 'title'], action.title.value).toJS();
+    case SET_DESC:
+      return newState.setIn(['imageDatas', action.desc.index, 'desc'], action.desc.value).toJS();
+    case REFRESH_IMAGE:
+      return newState.setIn(['imageDatas', action.index, 'imageURL'], action.randomUrl).toJS();
     default:
       return state;
   }
