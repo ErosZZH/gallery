@@ -137,3 +137,8 @@ export function saveText(image) {
   }
 }
 
+export function refreshImage(index, url) {
+  const randomUrl = `${url}?${Math.floor(Math.random() * 999999)}`;
+  return {type: types.REFRESH_IMAGE, index, randomUrl};
+}
+

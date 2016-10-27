@@ -8,3 +8,4 @@ export const INIT_IMAGE = 'INIT_IMAGE';
 export const SET_TITLE = 'SET_TITLE';
 export const SET_DESC = 'SET_DESC';
 export const SAVE_TEXT = 'SAVE_TEXT';
+export const REFRESH_IMAGE = 'REFRESH_IMAGE';

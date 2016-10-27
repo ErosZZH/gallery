@@ -12,6 +12,7 @@ export class ImageEditor extends Component {
   }
 
   render() {
+    const self = this;
     const uploaderProps = {
       action: `/api/uploadImage?fileName=${this.props.fileName}`,
       multiple: false,
@@ -27,6 +28,7 @@ export class ImageEditor extends Component {
       // },
       onSuccess(file) {
         console.log('onSuccess', file);
+        self.props.refreshImage();
       },
       // onProgress(step, file) {
       //   console.log('onProgress', Math.round(step.percent), file.name);

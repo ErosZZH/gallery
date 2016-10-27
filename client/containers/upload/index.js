@@ -4,7 +4,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {ImageEditor} from 'components/imageEditor';
-import {setTitle, setDesc, saveText} from 'actions/image';
+import {setTitle, setDesc, saveText, refreshImage} from 'actions/image';
 
 require('./styles.scss');
 
@@ -35,6 +35,12 @@ export class Upload extends Component {
     }.bind(this);
   };
 
+  refreshImg = index => {
+    return function() {
+      this.props.refreshImage(index, this.props.imageDatas[index].imageURL);
+    }.bind(this);
+  };
+
   render() {
     return (
       <section>
@@ -51,6 +57,7 @@ export class Upload extends Component {
                 changeTitle={this.changeTitle(index)}
                 changeDesc={this.changeDesc(index)}
                 savetxt={this.saveText(index)}
+                refreshImage={this.refreshImg(index)}
               />
             )
           }
@@ -64,4 +71,4 @@ export class Upload extends Component {
 }
 
 export default connect(state => {return {imageDatas: state.image.imageDatas}},
-  {setTitle, setDesc, saveText})(Upload);
+  {setTitle, setDesc, saveText, refreshImage})(Upload);
