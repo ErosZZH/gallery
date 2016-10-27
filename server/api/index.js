@@ -5,15 +5,25 @@ import formidable from 'formidable';
 import fs from 'fs';
 import gm from 'gm';
 import config from '../../config';
+import {Image} from '../db';
 
 export function fetchData(req, res) {
-  return res.status(200).send(require('../data/imageDatas.json'));
+  Image.find({}, (err, images) => {
+    if(err || !images || images.length === 0) {
+      return res.status(500).send('Internal Error.');
+    }
+    return res.status(200).send(images);
+  });
 }
 
 export function updateText(req, res) {
   const image = req.body;
-  console.log(JSON.stringify(image));
-  return res.status(200).send('OK');
+  Image.update({_id: image._id}, image, err => {
+    if(err) {
+      return res.status(500).send('Internal Error.');
+    }
+    return res.status(200).send('OK');
+  });
 }
 
 export function uploadImage(req, res) {
