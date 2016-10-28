@@ -47,3 +47,5 @@ app.get('*', (req, res) => {
 // });
 
 app.listen(config.port);
+
+export default app;

@@ -1,33 +1,140 @@
-var webpackCfg = require('./webpack.config.js');
+var path = require('path');
+var webpack = require('webpack');
 
 module.exports = function(config) {
   config.set({
-    basePath: '',
-    browsers: [ 'PhantomJS' ],
+    // Start these browsers, currently available:
+    // - Chrome
+    // - ChromeCanary
+    // - Firefox
+    // - Opera (has to be installed with `npm install karma-opera-launcher`)
+    // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
+    // - PhantomJS
+    // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
+    browsers: ['jsdom'],
+
+    frameworks: ['mocha', 'sinon'],
+
+    // Point karma at the tests.webpack.js
     files: [
-      'test/loadtests.js'
+      'webpack/tests.webpack.js'
     ],
-    port: 8080,
-    captureTimeout: 60000,
-    frameworks: [ 'mocha', 'chai' ],
-    client: {
-      mocha: {}
-    },
-    singleRun: true,
-    reporters: [ 'mocha', 'coverage' ],
+
+    // Run karma through preprocessor plugins
     preprocessors: {
-      'test/loadtests.js': [ 'webpack', 'sourcemap' ]
+      'webpack/tests.webpack.js': [ 'webpack', 'sourcemap' ]
     },
-    webpack: webpackCfg,
-    webpackServer: {
+
+    // Continuous Integration mode
+    // if true, it capture browsers, run tests and exit
+    singleRun: true,
+
+    // How long will Karma wait for a message from a browser before disconnecting
+    // from it (in ms).
+    browserNoActivityTimeout: 30000,
+
+    webpack: {
+      devtool: 'inline-source-map',
+      context: path.join(__dirname, 'client'),
+      externals: {
+        'cheerio': 'window',
+        'react/addons': true, // important!!
+        'react/lib/ExecutionEnvironment': true,
+        'react/lib/ReactContext': true
+      },
+      module: {
+        loaders: [
+          {
+            test: /\.js$|\.jsx$/,
+            loader: 'babel-loader',
+            // Reason why we put this here instead of babelrc
+            // https://github.com/gaearon/react-transform-hmr/issues/5#issuecomment-142313637
+            query: {
+              'presets': ['es2015', 'react', 'stage-0'],
+              'plugins': [
+                'transform-react-remove-prop-types',
+                'transform-react-constant-elements',
+                'transform-react-inline-elements'
+              ]
+            },
+            include: [path.join(__dirname, 'client'), path.join(__dirname, 'tests', 'client')],
+            exclude: path.join(__dirname, '/node_modules/')
+          },
+          {
+            test: /\.(png|jpg|gif|woff|woff2|eot|ttf|ico)$/,
+            loader: 'url-loader',
+            query: {
+              name: '[hash].[ext]',
+              limit: 8192
+            }
+          },
+          {
+            test: /\.(mp4|ogg|svg)$/,
+            loader: 'file-loader'
+          },
+          {
+            test: /\.json$/,
+            loader: 'json-loader'
+          },
+          {
+            test: /\.css$/,
+            loader: 'style-loader!css-loader!postcss-loader'
+          },
+          {
+            test: /\.sass/,
+            loader: 'style-loader!css-loader!postcss-loader!sass-loader?outputStyle=expanded&indentedSyntax'
+          },
+          {
+            test: /\.scss/,
+            loader: 'style-loader!css-loader!postcss-loader!sass-loader?outputStyle=expanded'
+          },
+          {
+            test: /\.less/,
+            loader: 'style-loader!css-loader!postcss-loader!less-loader'
+          },
+          {
+            test: /\.styl/,
+            loader: 'style-loader!css-loader!postcss-loader!stylus-loader'
+          }
+        ]
+      },
+      resolve: {
+        extensions: ['', '.js', '.jsx'],
+        modulesDirectories: [
+          'client', 'tests', 'node_modules'
+        ]
+      },
+      node: {
+        fs: 'empty'
+      },
+      watch: true
+    },
+
+    webpackMiddleware: {
+      // webpack-dev-middleware configuration
       noInfo: true
     },
-    coverageReporter: {
-      dir: 'coverage/',
-      reporters: [
-        { type: 'html' },
-        { type: 'text' }
-      ]
-    }
+
+    webpackServer: {
+      noInfo: true // Do not spam the console when running in karma
+    },
+
+    plugins: [
+      'karma-jsdom-launcher',
+      'karma-mocha',
+      'karma-sinon',
+      'karma-mocha-reporter',
+      'karma-sourcemap-loader',
+      'karma-webpack'
+    ],
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage',
+    // 'mocha' (added in plugins)
+    reporters: ['mocha'],
+
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO
   });
 };

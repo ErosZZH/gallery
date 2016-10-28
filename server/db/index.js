@@ -3,16 +3,19 @@
  */
 import mongoose from 'mongoose';
 import Image from './imageSchema';
+import config from '../../config';
 
 const connect = (initdb) => {
-  mongoose.connect('mongodb://localhost:27017/gallery', err => {
-    if (err) {
-      console.log("connect mongodb " + err);
-    }else{
-      console.log("connect mongodb successfully...");
-      initdb();
-    }
-  });
+  if (process.env.NODE_ENV !== 'test') {
+    mongoose.connect(`mongodb://${config.mongoUrl}/gallery`, err => {
+      if (err) {
+        console.log("connect mongodb " + err);
+      }else{
+        console.log("connect mongodb successfully...");
+        initdb();
+      }
+    });
+  }
 };
 
 const disconnect = () => {

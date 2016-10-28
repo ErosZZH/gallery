@@ -132,8 +132,9 @@ export function saveText(image) {
   return dispatch => {
     request['post']('/api/updateText', image)
       .then(() => {
-         dispatch({type: types.SAVE_TEXT});
+        dispatch({type: types.SAVE_TEXT});
       });
+    return Promise.resolve();
   }
 }
 
